@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: Colors.deepPurple,
         )
       ),
@@ -122,27 +122,47 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Top rated movies"),
+        title: const Text("Top rated movies", style: TextStyle(color: Colors.white)),
       ),
       body: isLoading
-      ? Center(
+      ? const Center(
         child: CircularProgressIndicator(),
       )
       : isError
-        ? Center(
+        ? const Center(
           child: Text("Failed to load movies"),
       )
       : ListView.builder(
         itemCount: movies.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(movies[index].title),
-            subtitle: Text(movies[index].overview),
-            leading: Image.network(
-              'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
-              width: 72,
-            ),
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 4,
+                child: ListTile(
+                  title: Text(
+                      movies[index].title,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                  ),
+                  subtitle: Text(
+                      movies[index].overview,
+                      style: const TextStyle(fontSize: 14.0),
+                  ),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child:Image.network(
+                      'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
+                      width: 72,
+                    ),
+                  )
+                ),
+              ),
           );
+
+
         },
       ),
     );
