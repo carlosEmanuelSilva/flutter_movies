@@ -33,6 +33,10 @@ class MyApp extends StatelessWidget {
       title: 'The Movies App',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          color: Colors.deepPurple,
+        )
       ),
       home: const MyHomePage(title: 'Home Page'),
     );
@@ -47,15 +51,23 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title, style: const TextStyle(color: Colors.white)),
       ),
       body: Center(
-        child: OutlinedButton(
+        child: ElevatedButton(
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const MyMoviesPage()));
           },
-          child: const Text("Movies"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurple,
+            textStyle: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          ),
+          child: const Text("Explore Movies", style: TextStyle(color: Colors.white)),
         ),
       ),
     );
