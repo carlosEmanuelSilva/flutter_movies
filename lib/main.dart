@@ -52,7 +52,7 @@ class MyHomePage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        const MyMoviesPage(title: 'Movies Page')));
+                        const MyMoviesPage()));
           },
           child: const Text("Movies"),
         ),
@@ -62,8 +62,7 @@ class MyHomePage extends StatelessWidget {
 }
 
 class MyMoviesPage extends StatefulWidget {
-  const MyMoviesPage({super.key, required this.title});
-  final String title;
+  const MyMoviesPage({super.key});
 
   @override
   State<MyMoviesPage> createState() => _MyMoviesPageState();
@@ -74,7 +73,7 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
 
   Future<void> fetchMovies() async {
     final response = await http.get(Uri.parse(
-        'https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY_HERE'));
+        'https://api.themoviedb.org/3/movie/top_rated?api_key=133fe43311f2ef6cc18f827ca0ddf4ed'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body);
       setState(() {
@@ -87,7 +86,24 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchMovies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Scaffold(
+    appBar: AppBar(title: const Text("Top rated movies"),),
+    body: ListView.builder(
+      itemCount: movies.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(movies[index].title),
+          subtitle: Text(movies[index].overview),
+        );
+      },
+    ),
+    );
   }
 }
