@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'API APP',
+      title: 'The Movies App',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
@@ -71,11 +71,22 @@ class MyMoviesPage extends StatefulWidget {
 
 class _MyMoviesPageState extends State<MyMoviesPage> {
   List<Movie> movies = [];
+  bool isLoading = false;
+  bool isError = false;
 
   Future<void> fetchMovies() async {
+    setState(() {
+      isLoading = true;
+    });
+
     final apiKey = dotenv.env['API_KEY'];
     final response = await http.get(Uri.parse(
         'https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey'));
+
+    setState(() {
+      isLoading = false;
+    });
+
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body);
       setState(() {
@@ -83,7 +94,9 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
             parsed['results'].map((movie) => Movie.fromJson(movie)));
       });
     } else {
-      throw Exception('Failed to load movies');
+      setState(() {
+        isError = true;
+      });
     }
   }
 
@@ -99,7 +112,15 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
       appBar: AppBar(
         title: const Text("Top rated movies"),
       ),
-      body: ListView.builder(
+      body: isLoading
+      ? Center(
+        child: CircularProgressIndicator(),
+      )
+      : isError
+        ? Center(
+          child: Text("Failed to load movies"),
+      )
+      : ListView.builder(
         itemCount: movies.length,
         itemBuilder: (context, index) {
           return ListTile(
