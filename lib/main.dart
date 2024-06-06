@@ -9,13 +9,15 @@ void main() {
 class Movie {
   final String title;
   final String overview;
+  final String posterPath;
 
-  Movie({required this.title, required this.overview});
+  Movie({required this.title, required this.overview, required this.posterPath});
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
       title: json['title'],
       overview: json['overview'],
+      posterPath: json['poster_path']
     );
   }
 }
@@ -101,6 +103,10 @@ class _MyMoviesPageState extends State<MyMoviesPage> {
         return ListTile(
           title: Text(movies[index].title),
           subtitle: Text(movies[index].overview),
+          leading: Image.network(
+            'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
+             width: 72,
+            ),
         );
       },
     ),
