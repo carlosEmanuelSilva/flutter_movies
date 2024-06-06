@@ -5,6 +5,20 @@ void main() {
   runApp(const MyApp());
 }
 
+class Movie {
+  final String title;
+  final String overview;
+
+  Movie({required this.title, required this.overview});
+
+  factory Movie.fromJson(Map<String, dynamic> json) {
+     return Movie(
+      title: json['title'],
+      overview: json['overview'],
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
    const MyApp({super.key});
 
